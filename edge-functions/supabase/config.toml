@@ -1,0 +1,16 @@
+# Deploy from Web/edge-functions with:
+#   npx supabase functions deploy ezee-billing --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy ezee-reservation-detail --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy save-ezee-credentials --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy save-synxis-credentials --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy request-pms-housekeeping --project-ref zztgzkomzchxcnlhstnj
+# request-pms-housekeeping: bidirectional HK sync (Nexus board + DualPMS queue). Body: syncNexus/syncPms optional.
+#   npx supabase functions deploy get-pms-bridge-status --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy pms-sync --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy storage-upload-url --project-ref zztgzkomzchxcnlhstnj
+#   npx supabase functions deploy storage-download-url --project-ref zztgzkomzchxcnlhstnj
+# Set secrets: EZEE_SECRETS_KEY (encrypts eZee + SynXis passwords in app_settings)
+# Backblaze B2 (file storage): B2_ENDPOINT B2_REGION B2_BUCKET B2_KEY_ID B2_APPLICATION_KEY
+# Dual PMS: VPS bridge (bridge/ + PM2) copies Postgres → Supabase
+# Cloud pms-sync: read-only status — no SynXis/eZee API calls
+project_id = "zztgzkomzchxcnlhstnj"

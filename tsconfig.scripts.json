@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "npm:@supabase/supabase-js@2": ["./node_modules/@supabase/supabase-js"],
+      "npm:imapflow@1.0.171": ["./node_modules/imapflow"]
+    }
+  },
+  "include": [
+    "scripts/**/*",
+    "edge-functions/supabase/functions/_shared/**/*"
+  ]
+}

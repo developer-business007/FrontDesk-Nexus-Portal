@@ -1,0 +1,15 @@
+[
+  {
+    "corsRuleName": "frontdesk-web-extension-put-get",
+    "allowedOrigins": [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://front-desk-nexus.vercel.app",
+      "chrome-extension://oellgjjhompcikojenbbfepojdcpnpla"
+    ],
+    "allowedOperations": ["GET", "PUT", "HEAD"],
+    "allowedHeaders": ["authorization", "content-type", "x-amz-content-sha256", "x-amz-date", "x-amz-*"],
+    "exposeHeaders": ["etag", "x-amz-version-id"],
+    "maxAgeSeconds": 3600
+  }
+]
