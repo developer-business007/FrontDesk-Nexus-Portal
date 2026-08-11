@@ -27,8 +27,14 @@ function invokeErrorMessage(error: unknown, data: { error?: string } | null): st
   return "Storage request failed";
 }
 
-async function sha256Hex(bytes: Uint8Array): Promise<string> {
-  const hash = await crypto.subtle.digest("SHA-256", bytes);
+/** slice() yields a plain ArrayBuffer (not SharedArrayBuffer) for SubtleCrypto / fetch. */
+function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+}
+
+/** Native B2 upload requires SHA-1 (X-Bz-Content-Sha1), not SHA-256. */
+async function sha1Hex(data: BufferSource): Promise<string> {
+  const hash = await crypto.subtle.digest("SHA-1", data);
   return [...new Uint8Array(hash)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
@@ -106,11 +112,12 @@ export async function uploadBytesToB2(args: {
   contentType: string;
 }): Promise<void> {
   const bytes = await toUint8Array(args.body);
+  const buffer = toArrayBuffer(bytes);
   const upload = await getStorageUploadUrl({
     category: args.category,
     objectPath: args.objectPath,
     contentType: args.contentType,
-    size: bytes.byteLength,
+    size: buffer.byteLength,
   });
 
   const res = await fetch(upload.uploadUrl, {
@@ -118,11 +125,11 @@ export async function uploadBytesToB2(args: {
     headers: {
       Authorization: upload.authorizationToken,
       "X-Bz-File-Name": encodeURIComponent(upload.fileName),
-      "X-Bz-Content-Sha256": await sha256Hex(bytes),
+      "X-Bz-Content-Sha1": await sha1Hex(buffer),
       "Content-Type": upload.contentType,
-      "Content-Length": String(bytes.byteLength),
+      "Content-Length": String(buffer.byteLength),
     },
-    body: bytes,
+    body: buffer,
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
